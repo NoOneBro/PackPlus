@@ -741,8 +741,6 @@ pub async fn windows_build(
     if !base_path.exists() {
         fs::create_dir_all(&base_path).map_err(|e| e.to_string())?;
     }
-    #[cfg(not(debug_assertions))]
-    sleep(Duration::from_secs(10)).await;
     let config_dir = base_path.join("config").join("inject");
     if !config_dir.exists() {
         fs::create_dir_all(&config_dir).map_err(|e| e.to_string())?;
@@ -754,8 +752,6 @@ pub async fn windows_build(
             copy_dir(html_dir, &www_dir).expect("copy html dir failed");
         }
     }
-    #[cfg(not(debug_assertions))]
-    sleep(Duration::from_secs(10)).await;
     let custom_js_path = config_dir.join("custom.js");
     fs::write(custom_js_path, custom_js).map_err(|e| e.to_string())?;
     let man_path = base_path.join("config").join("man");
@@ -775,8 +771,6 @@ pub async fn windows_build(
         rhexe_dir.to_str().unwrap(),
         script_path
     );
-    #[cfg(not(debug_assertions))]
-    sleep(Duration::from_secs(10)).await;
     run_command(rh_command).await?;
     Ok(())
 }
@@ -795,8 +789,6 @@ pub async fn macos_build(
     if !app_dir.exists() {
         fs::create_dir_all(&app_dir).expect("create app dir failed");
     }
-    #[cfg(not(debug_assertions))]
-    sleep(Duration::from_secs(10)).await;
     let config_dir = base_path.join("Contents/MacOS/config/inject");
     let resources_dir = base_path.join("Contents/Resources");
     if !config_dir.exists() {
@@ -812,8 +804,6 @@ pub async fn macos_build(
             copy_dir(html_dir, &www_dir).expect("copy html dir failed");
         }
     }
-    #[cfg(not(debug_assertions))]
-    sleep(Duration::from_secs(10)).await;
     let custom_js_path = config_dir.join("custom.js");
     fs::write(custom_js_path, custom_js).expect("write custom.js failed");
     let exe_path = env::current_exe().unwrap();
@@ -824,8 +814,6 @@ pub async fn macos_build(
     fs::copy(&info_plist_source, &info_plist_target).expect("copy info.plist failed");
     let pp_app_target = base_path.join("Contents/MacOS/PacBao");
     fs::copy(&exe_path, &pp_app_target).expect("copy PacBao app failed");
-    #[cfg(not(debug_assertions))]
-    sleep(Duration::from_secs(10)).await;
     let man_path = base_path.join("Contents/MacOS/config/man");
     fs::write(man_path, config).expect("write man failed");
     if !base64_png.is_empty() {
